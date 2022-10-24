@@ -20,8 +20,6 @@ print(start_time)
 
 
 # if (ct >= ct1) and (ct <= ct2):
-
-
 nse_url = "https://www.nseindia.com/"
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, '
                          'like Gecko) '
@@ -43,20 +41,20 @@ page = requests.get(new_url,headers=headers,timeout=10,cookies=cookies)
 # print(page.text)
 dajs = json.loads(page.text)
 
-headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, '
-                     'like Gecko) '
-                     'Chrome/80.0.3987.149 Safari/537.36',
-       'accept-language': 'en,gu;q=0.9,hi;q=0.8', 'accept-encoding': 'gzip, deflate, br'}
+# headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, '
+#                      'like Gecko) '
+#                      'Chrome/80.0.3987.149 Safari/537.36',
+#        'accept-language': 'en,gu;q=0.9,hi;q=0.8', 'accept-encoding': 'gzip, deflate, br'}
 
-base_url = "https://www.nseindia.com/market-data/pre-open-market-cm-and-emerge-market"
-page_resp = requests.get(base_url,headers=headers,timeout=10)
-page_cookies = page_resp.cookies
+# base_url = "https://www.nseindia.com/market-data/pre-open-market-cm-and-emerge-market"
+# page_resp = requests.get(base_url,headers=headers,timeout=10)
+# page_cookies = page_resp.cookies
 
 # print(page_cookies)
 
 
 
-fut_page = requests.get(fut_url,headers=headers, timeout=10,cookies = page_cookies)
+fut_page = requests.get(fut_url,headers=headers, timeout=10,cookies = cookies)
 # print(fut_page.text)
 fut_dajs = json.loads(fut_page.text)
 
@@ -249,25 +247,25 @@ fut_url = "https://www.nseindia.com/api/liveEquity-derivatives?index=nifty_bank_
 money_control_url = "https://www.moneycontrol.com/india/indexfutures/banknifty/23/2022-10-27/FUTIDX/XX/0.00/true"
 # future_url = "https://www.nseindia.com/api/historical/fo/derivatives?&symbol=BANKNIFTY&identifier=FUTIDXBANKNIFTY24-02-2022XX0.00"
 
-headers = {'User-Agent': 'Mozilla/5.0'}
+# headers = {'User-Agent': 'Mozilla/5.0'}
 page = requests.get(new_url,headers=headers, timeout=10,cookies=cookies)
 # print(page.text)
 dajs = json.loads(page.text)
 
-headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, '
-                     'like Gecko) '
-                     'Chrome/80.0.3987.149 Safari/537.36',
-       'accept-language': 'en,gu;q=0.9,hi;q=0.8', 'accept-encoding': 'gzip, deflate, br'}
+# headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, '
+#                      'like Gecko) '
+#                      'Chrome/80.0.3987.149 Safari/537.36',
+#        'accept-language': 'en,gu;q=0.9,hi;q=0.8', 'accept-encoding': 'gzip, deflate, br'}
 
-base_url = "https://www.nseindia.com/market-data/pre-open-market-cm-and-emerge-market"
-page_resp = requests.get(base_url,headers=headers,timeout=10)
-page_cookies = page_resp.cookies
+# # base_url = "https://www.nseindia.com/market-data/pre-open-market-cm-and-emerge-market"
+# # page_resp = requests.get(base_url,headers=headers,timeout=10)
+# # page_cookies = page_resp.cookies
 
 # print(page_cookies)
 
 
 
-fut_page = requests.get(fut_url,headers=headers, timeout=10,cookies = page_cookies)
+fut_page = requests.get(fut_url,headers=headers, timeout=10,cookies = cookies)
 # print(fut_page.text)
 fut_dajs = json.loads(fut_page.text)
 
