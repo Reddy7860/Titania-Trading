@@ -5,7 +5,7 @@ from pytz import timezone
 def main():
     # Configure the logging system
     logging.basicConfig(filename ='/Users/apple/Desktop/Python_Stocks_Automation/app_'+ str(datetime.now(timezone("Asia/Kolkata")).strftime("%Y-%m-%d")) +'.log',
-                        level = logging.ERROR)
+                        level = logging.DEBUG)
       
     # Variables (to make the calls that follow work)
     hostname = 'www.python.org'
