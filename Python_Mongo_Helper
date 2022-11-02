@@ -1,0 +1,15 @@
+# This is the Pymongo helper file 
+
+## Delete the columns in Mongodb
+db["orders_raw_data"].update_many(
+   { },
+   {'$unset': { 'Spot_Price': "", 
+             'Strike_Buy_Price': "",
+             'premium_StopLoss': "", 
+             'premium_Target': "", 
+             'lotsize': "", 
+             'historic_profit': "",
+             'current_script': "", 
+             'token': "", 
+             'conclusion': "" } }
+)
