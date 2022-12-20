@@ -107,3 +107,29 @@ fig.update_layout(
 
 
 fig.show()
+
+
+
+
+
+
+
+
+
+
+#### Technical Chart visualisation
+
+technical_indicator_5_minutes = db["technical_indicator_5_minutes"].find({'Stock':"Nifty"})
+technical_indicator_5_minutes =  pd.DataFrame(list(technical_indicator_5_minutes))
+
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=technical_indicator_5_minutes['Datetime'], y=technical_indicator_5_minutes['buy_probability'],
+                    mode='lines+markers',
+                    name='Buy Probability'))
+fig.add_trace(go.Scatter(x=technical_indicator_5_minutes['Datetime'], y=technical_indicator_5_minutes['sell_probability'],
+                    mode='lines+markers',
+                    name='Sell Probability'))
+
+
+fig.show()
+
