@@ -14,23 +14,34 @@ db = client["titania_trading"]
 Stocks_data_5_minutes = db["Stocks_data_5_minutes"].find({'Stock':"BankNifty",'instrumenttype':"FUTIDX"}).sort([('Datetime', 1)])
 Stocks_data_5_minutes =  pd.DataFrame(list(Stocks_data_5_minutes))
 
+Stocks_data_1_minutes = db["Stocks_data_1_minutes"].find({'Stock':"BankNifty",'instrumenttype':"FUTIDX"}).sort([('Datetime', 1)])
+Stocks_data_1_minutes =  pd.DataFrame(list(Stocks_data_1_minutes))
 
 support_and_resistance = db["support_and_resistance"].find({'Stock':"BankNifty"}).sort([('Execution_date', 1)])
 support_and_resistance =  pd.DataFrame(list(support_and_resistance))
 
-
 Stocks_data_5_minutes = Stocks_data_5_minutes[['Datetime','Open','High','Low','Close','Volume','Execution_Date']]
+Stocks_data_1_minutes = Stocks_data_1_minutes[['Datetime','Open','High','Low','Close','Volume','Execution_Date']]
 
 support_and_resistance = support_and_resistance[['Stock','Execution_date','pivot_point','arima_resistance_2','arima_resistance_1','arima_pivot_point','arima_support_2','arima_support_1']]
 
 print(Stocks_data_5_minutes.columns)
 print(support_and_resistance.columns)
 
+
+futures_options_signals['Combined_Rnk'] = futures_options_signals['fut_volume_rank'] +  futures_options_signals['call_volume_rank'] +  futures_options_signals['put_volume_rank']
+futures_options_signals = futures_options_signals.sort_values(['Combined_Rnk'])
+futures_options_signals.reset_index(inplace=True,drop=True)
+highest_change = futures_options_signals.loc[0,'Datetime']
+highest_entry = Stocks_data_1_minutes.loc[Stocks_data_1_minutes['Datetime'] == highest_change,]
+highest_entry.reset_index(inplace=True,drop=True)
+oi_low = highest_entry.loc[0,"Low"]
+oi_high = highest_entry.loc[0,"High"]
+
 modified_stocks_5_data = Stocks_data_5_minutes.merge(support_and_resistance, left_on='Execution_Date', right_on='Execution_date',how="left")
-
-
 modified_stocks_5_data['Datetime'] = modified_stocks_5_data['Datetime'] + timedelta(hours=5,minutes=30)
-
+modified_stocks_5_data['oi_low'] = oi_low
+modified_stocks_5_data['oi_high'] = oi_high
 
 
 algo_orders_place_data = db["algo_orders_place_data"].find({'client_id':"J95213","Stock":"%5ENSEBANK"})
@@ -71,6 +82,18 @@ fig.add_trace(
     go.Scatter(mode = "lines",
         x=modified_stocks_5_data['Datetime'],
         y=modified_stocks_5_data['arima_support_1']
+    ))
+
+fig.add_trace(
+    go.Scatter(mode = "lines",
+        x=modified_stocks_5_data['Datetime'],
+        y=modified_stocks_5_data['oi_low']
+    ))
+
+fig.add_trace(
+    go.Scatter(mode = "lines",
+        x=modified_stocks_5_data['Datetime'],
+        y=modified_stocks_5_data['oi_high']
     ))
 
 # fig.add_trace(
