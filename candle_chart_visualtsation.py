@@ -32,6 +32,7 @@ print(support_and_resistance.columns)
 futures_options_signals['Combined_Rnk'] = futures_options_signals['fut_volume_rank'] +  futures_options_signals['call_volume_rank'] +  futures_options_signals['put_volume_rank']
 futures_options_signals = futures_options_signals.sort_values(['Combined_Rnk'])
 futures_options_signals.reset_index(inplace=True,drop=True)
+Stocks_data_1_minutes['Datetime'] = Stocks_data_1_minutes['Datetime'] + timedelta(hours=5,minutes=30)
 highest_change = futures_options_signals.loc[0,'Datetime']
 highest_entry = Stocks_data_1_minutes.loc[Stocks_data_1_minutes['Datetime'] == highest_change,]
 highest_entry.reset_index(inplace=True,drop=True)
