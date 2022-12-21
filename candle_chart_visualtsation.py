@@ -32,10 +32,12 @@ print(support_and_resistance.columns)
 futures_options_signals['Combined_Rnk'] = futures_options_signals['fut_volume_rank'] +  futures_options_signals['call_volume_rank'] +  futures_options_signals['put_volume_rank']
 futures_options_signals = futures_options_signals.sort_values(['Combined_Rnk'])
 futures_options_signals.reset_index(inplace=True,drop=True)
-Stocks_data_1_minutes['Datetime'] = Stocks_data_1_minutes['Datetime'] + timedelta(hours=5,minutes=30)
+
 highest_change = futures_options_signals.loc[0,'Datetime']
+Stocks_data_1_minutes['Datetime'] = Stocks_data_1_minutes['Datetime'] + timedelta(hours=5,minutes=30)
 highest_entry = Stocks_data_1_minutes.loc[Stocks_data_1_minutes['Datetime'] == highest_change,]
 highest_entry.reset_index(inplace=True,drop=True)
+
 oi_low = highest_entry.loc[0,"Low"]
 oi_high = highest_entry.loc[0,"High"]
 
@@ -45,7 +47,7 @@ modified_stocks_5_data['oi_low'] = oi_low
 modified_stocks_5_data['oi_high'] = oi_high
 
 
-algo_orders_place_data = db["algo_orders_place_data"].find({'client_id':"J95213","Stock":"%5ENSEBANK"})
+algo_orders_place_data = db["algo_orders_place_data"].find({'Stock':"%5ENSEBANK",'client_id':"J95213","execution_date":"2022-12-20"})
 algo_orders_place_data =  pd.DataFrame(list(algo_orders_place_data))
 
 modified_stocks_5_data['Execution_Date'] = pd.to_datetime(modified_stocks_5_data['Execution_Date'])
@@ -70,31 +72,36 @@ fig = go.Figure(data=[go.Candlestick(x=modified_stocks_5_data['Datetime'],
 fig.add_trace(
     go.Scatter(mode = "lines",
         x=modified_stocks_5_data['Datetime'],
-        y=modified_stocks_5_data['arima_pivot_point']
+        y=modified_stocks_5_data['arima_pivot_point'],
+        name='Arima Pivot Point'
     ))
 
 fig.add_trace(
     go.Scatter(mode = "lines",
         x=modified_stocks_5_data['Datetime'],
-        y=modified_stocks_5_data['arima_resistance_1']
+        y=modified_stocks_5_data['arima_resistance_1'],
+        name = 'Arima Resistance'
     ))
 
 fig.add_trace(
     go.Scatter(mode = "lines",
         x=modified_stocks_5_data['Datetime'],
-        y=modified_stocks_5_data['arima_support_1']
+        y=modified_stocks_5_data['arima_support_1'],
+        name = 'Arima Support'
     ))
 
 fig.add_trace(
     go.Scatter(mode = "lines",
         x=modified_stocks_5_data['Datetime'],
-        y=modified_stocks_5_data['oi_low']
+        y=modified_stocks_5_data['oi_low'],
+        name = 'Highest OI Low'
     ))
 
 fig.add_trace(
     go.Scatter(mode = "lines",
         x=modified_stocks_5_data['Datetime'],
-        y=modified_stocks_5_data['oi_high']
+        y=modified_stocks_5_data['oi_high'],
+        name = 'Highest OI High'
     ))
 
 # fig.add_trace(
@@ -111,10 +118,16 @@ fig.add_trace(
 
 fig.add_trace(
     go.Scatter(
-        x=["2022-12-13 09:20:00"],
-        y=["43048.47"],
+        x=algo_orders_place_data['Datetime'],
+        y=algo_orders_place_data['Value'],
         mode="markers",
-        marker=dict(symbol='triangle-down-open')
+        marker=dict(symbol='star-triangle-down'),
+        marker_size=12,
+        hovertemplate = ('<i>Value</i>: %{y:.2f}'+\
+                         '<br><b>Height</b>: %customdata[0]<br>'+\
+                      '<br><b>Thickness 1</b>: %{customdata[1]}<br>'+\
+                      '<br><b>Thickness 2</b>: %{customdata[2]}<br>'+\
+                          '<br><b>Time</b>: %{x}<br>')
 
     )
 )
